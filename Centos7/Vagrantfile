@@ -1,0 +1,26 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.define "centos" do |centos|
+    centos.vm.box = "centos/7"
+    centos.vm.hostname = "centos7"
+    centos.vm.box_url = "centos/7"
+    centos.vm.network :private_network, ip: "192.168.56.10"
+    centos.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 4096]
+      v.customize ["modifyvm", :id, "--name", "centos"]
+      v.customize ["modifyvm", :id, "--cpus", "2"]
+    end
+	config.vm.provision "shell", inline: <<-SHELL
+      sed -i 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/g' /etc/ssh/sshd_config   
+      service sshd restart
+      service sshd restart
+	SHELL
+	centos.vm.provision "shell", path: "prerequisites.sh"
+  end
+end
+
+
+
