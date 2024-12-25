@@ -16,7 +16,9 @@ echo "[2]: setup keyboard"
 sudo setxkbmap fr
 sudo sed -i 's/XKBLAYOUT=\"\w*"/XKBLAYOUT=\"fr\"/g' /etc/default/keyboard
 
+
+echo "[3]: set ssh interactive auth"
+sed -i 's/KbdInteractiveAuthentication no/KbdInteractiveAuthentication yes/g' /etc/ssh/sshd_config   
+service ssh restart
+
 echo "END - install common - " $IP
-
-
-
